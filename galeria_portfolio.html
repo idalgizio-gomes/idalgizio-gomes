@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>Idalgízio Gomes — Engenharia Eletrotécnica e de Computadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1417; --ink-2:#121A1E; --ink-3:#172227;
+    --line:#243238; --line-soft:#1c2a30;
+    --paper:#E9E7DF; --muted:#8FA3A9; --dim:#5E7177;
+    --trace:#34D8C6; --trace-dim:#1c6f69; --mark:#F2A93B; --danger:#E5685B;
+    --nav-bg:rgba(14,20,23,.74);
+    /* tela do osciloscópio (muda com o tema) */
+    --screen:#0d1418; --screen-2:#0c1316; --screen-grid:#19252b; --screen-text:#7c919a;
+    --screen-trace:#34D8C6; --screen-trace-dim:#1c6f69; --screen-chip:rgba(8,14,16,.82);
+    --r:14px; --maxw:1140px;
+  }
+  :root[data-theme="light"]{
+    --ink:#EEF2F3; --ink-2:#FFFFFF; --ink-3:#FFFFFF;
+    --line:#D5DDE1; --line-soft:#E6ECEE;
+    --paper:#17242B; --muted:#46555D; --dim:#74848C;
+    --trace:#0E9A8C; --trace-dim:#8FCCC5; --mark:#BC7510; --danger:#C9483B;
+    --nav-bg:rgba(255,255,255,.82);
+    --screen:#E7EFEE; --screen-2:#F3F8F7; --screen-grid:#C8DCD8; --screen-text:#5B736F;
+    --screen-trace:#0B8F82; --screen-trace-dim:#7FBFB7; --screen-chip:rgba(255,255,255,.82);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--paper);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    transition:background .4s ease,color .4s ease}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 0%,transparent 75%);
+            mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 0%,transparent 75%)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:var(--nav-bg);border-bottom:1px solid var(--line);transition:background .4s,border-color .4s}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.04em;color:var(--paper)}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--trace);box-shadow:0 0 11px var(--trace);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .nav nav{display:flex;gap:22px;align-items:center}
+  .nav nav a{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);letter-spacing:.02em;transition:color .2s}
+  .nav nav a:hover{color:var(--trace)}
+  .nav .cta-mini{border:1px solid var(--line);padding:8px 14px;border-radius:8px;color:var(--paper);transition:.2s}
+  .nav .cta-mini:hover{border-color:var(--trace);color:var(--trace)}
+  .theme-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;transition:.2s;padding:0}
+  .theme-btn:hover{color:var(--trace);border-color:var(--trace)}
+  .theme-btn svg{width:17px;height:17px}
+  :root[data-theme="light"] .theme-btn .i-sun{display:block}
+  :root[data-theme="light"] .theme-btn .i-moon{display:none}
+  .theme-btn .i-sun{display:none}
+  @media(max-width:760px){ .nav nav a.hideable{display:none} }
+
+  /* HERO */
+  .hero{position:relative;padding:74px 0 30px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--trace);letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:22px}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--trace);display:inline-block}
+  h1.name{font-family:"Archivo",sans-serif;font-weight:900;font-size:clamp(2.7rem,7vw,5.4rem);line-height:.96;letter-spacing:-.02em;margin:0;color:var(--paper)}
+  h1.name .lo{color:var(--muted);display:block;font-size:.42em;font-weight:700;letter-spacing:.01em;margin-top:.5em}
+  .lede{max-width:660px;color:var(--muted);font-size:1.12rem;margin:26px 0 0}
+  .lede strong{color:var(--paper);font-weight:600}
+
+  /* SCOPE (hero) */
+  .scope{margin-top:40px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--screen-2),var(--screen));position:relative;overflow:hidden;transition:background .4s}
+  .scope-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--screen-grid);font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--screen-text);letter-spacing:.04em}
+  .scope-bar .grp{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .scope-bar .ch{color:var(--screen-trace)}
+  .wave-btns{display:inline-flex;gap:5px}
+  .wb{font-family:"IBM Plex Mono",monospace;font-size:10px;background:transparent;border:1px solid var(--screen-grid);color:var(--screen-text);padding:2px 8px;border-radius:5px;cursor:pointer;transition:.15s;letter-spacing:.02em}
+  .wb:hover{color:var(--screen-trace)}
+  .wb.active{color:var(--screen-trace);border-color:var(--screen-trace)}
+  .leds{display:inline-flex;gap:6px}
+  .leds i{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--screen-grid)}
+  .leds i.on{background:var(--mark);box-shadow:0 0 8px var(--mark)}
+  #scopeCanvas{display:block;width:100%;height:190px;cursor:crosshair}
+  .scope-read{position:absolute;right:14px;bottom:12px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--screen-trace);background:var(--screen-chip);border:1px solid var(--screen-trace-dim);padding:4px 8px;border-radius:6px;pointer-events:none}
+  .scope-hint{position:absolute;left:14px;bottom:12px;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--screen-text);opacity:.85;pointer-events:none;letter-spacing:.02em}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:15px 16px;background:var(--ink-2)}
+  .stat b{font-family:"Archivo",sans-serif;font-weight:800;font-size:1.55rem;display:block;color:var(--paper);line-height:1}
+  .stat span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.03em;display:block;margin-top:8px}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  section{padding:70px 0;position:relative}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:38px;border-bottom:1px solid var(--line);padding-bottom:18px;flex-wrap:wrap}
+  .sec-head h2{font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(1.5rem,3.3vw,2.2rem);margin:0;letter-spacing:-.01em}
+  .sec-head .idx{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--trace);letter-spacing:.1em}
+  .sec-head p{color:var(--muted);max-width:430px;margin:0;font-size:.96rem}
+
+  .about p{color:var(--muted);font-size:1.06rem;max-width:760px}
+  .about p strong{color:var(--paper);font-weight:600}
+  .about .quote{border-left:2px solid var(--trace);padding-left:18px;margin-top:26px;color:var(--paper);font-size:1.1rem}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+  .filters button{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.03em;background:var(--ink-2);color:var(--muted);border:1px solid var(--line);padding:8px 15px;border-radius:30px;cursor:pointer;transition:.18s}
+  .filters button:hover{color:var(--paper);border-color:var(--dim)}
+  .filters button.active{background:var(--trace);color:var(--ink);border-color:var(--trace);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:var(--r);background:var(--ink-3);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;cursor:pointer;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-4px);border-color:var(--trace-dim);box-shadow:0 18px 40px -24px rgba(52,216,198,.4)}
+  /* thumb: faixa de etiqueta em cima, traço ao centro, cadeira em baixo — sem sobreposições */
+  .card .thumb{height:134px;border-bottom:1px solid var(--line);background:var(--screen);position:relative;overflow:hidden;transition:background .4s}
+  .card .thumb svg{position:absolute;inset:0;width:100%;height:100%;transition:filter .3s}
+  .card:hover .thumb svg{filter:drop-shadow(0 0 4px var(--screen-trace))}
+  .card .tag{position:absolute;top:7px;left:13px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--screen-trace);background:var(--screen-chip);border:1px solid var(--screen-trace-dim);padding:3px 8px;border-radius:5px;z-index:2}
+  .card .uc{position:absolute;bottom:7px;right:13px;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--screen-text);background:var(--screen-chip);border:1px solid var(--screen-grid);padding:3px 8px;border-radius:5px;z-index:2;max-width:78%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .card .body{padding:18px 19px 20px}
+  .card h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.18rem;margin:0 0 7px;letter-spacing:-.01em;line-height:1.18;color:var(--paper)}
+  .card .sum{color:var(--muted);font-size:.92rem;margin:0}
+  .card .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:5px;background:var(--ink-2)}
+  .card .more{margin-top:14px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--trace);display:flex;align-items:center;gap:7px}
+  .card .more .x{transition:transform .3s}
+  .card.open .more .x{transform:rotate(45deg)}
+  .detail{max-height:0;overflow:hidden;transition:max-height .4s ease;border-top:1px solid transparent}
+  .card.open .detail{max-height:640px;border-top:1px solid var(--line);margin-top:16px}
+  .detail-inner{padding-top:16px}
+  .detail-inner h4{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+  .detail-inner ul{margin:0 0 16px;padding-left:18px;color:var(--muted);font-size:.9rem}
+  .detail-inner li{margin-bottom:5px}
+  .detail-inner .value{background:var(--ink-2);border:1px solid var(--line);border-left:2px solid var(--mark);border-radius:8px;padding:12px 14px;color:var(--paper);font-size:.9rem}
+  .detail-inner .value b{color:var(--mark);font-weight:600;font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:5px}
+
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:820px){.skills-grid{grid-template-columns:1fr}}
+  .skillcol{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--ink-2)}
+  .skillcol h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;gap:9px;color:var(--paper)}
+  .skillcol h3 i{width:7px;height:7px;border-radius:2px;background:var(--trace);display:inline-block}
+  .skillcol .role{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--dim);margin-bottom:16px;letter-spacing:.03em}
+  .srow{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+  .srow .top{display:flex;justify-content:space-between;font-size:.86rem;color:var(--paper)}
+  .srow .top span:last-child{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--dim)}
+  .bar{height:4px;border-radius:3px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--trace-dim),var(--trace));border-radius:3px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+
+  .contact{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--ink-2),var(--ink));padding:46px 38px;text-align:center;position:relative;overflow:hidden}
+  .contact h2{font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(1.7rem,4vw,2.6rem);margin:0 0 12px;color:var(--paper)}
+  .contact p{color:var(--muted);max-width:500px;margin:0 auto 28px}
+  .btns{display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
+  .btn{font-family:"IBM Plex Mono",monospace;font-size:13px;padding:13px 22px;border-radius:9px;border:1px solid var(--line);transition:.2s;display:inline-flex;align-items:center;gap:9px;color:var(--paper)}
+  .btn.primary{background:var(--trace);color:var(--ink);border-color:var(--trace);font-weight:600}
+  .btn.primary:hover{box-shadow:0 0 24px -4px var(--trace);transform:translateY(-2px)}
+  .btn.ghost:hover{border-color:var(--trace);color:var(--trace)}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;margin-top:40px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--dim)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.brand .dot{animation:none}}
+  :focus-visible{outline:2px solid var(--trace);outline-offset:3px;border-radius:4px}
+
+  /* seletor de idioma */
+  .lang-sw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang-sw button{font-family:"IBM Plex Mono",monospace;font-size:11px;background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);padding:7px 9px;cursor:pointer;transition:.15s}
+  .lang-sw button:last-child{border-right:0}
+  .lang-sw button:hover{color:var(--paper)}
+  .lang-sw button.active{background:var(--trace);color:var(--ink);font-weight:600}
+  @media(max-width:760px){ .nav nav{gap:12px} }
+
+  /* seletor de idioma */
+  .lang-sw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang-sw button{font-family:"IBM Plex Mono",monospace;font-size:11px;background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);padding:7px 9px;cursor:pointer;transition:.15s}
+  .lang-sw button:last-child{border-right:0}
+  .lang-sw button:hover{color:var(--paper)}
+  .lang-sw button.active{background:var(--trace);color:var(--ink);font-weight:600}
+  @media(max-width:760px){ .nav nav{gap:12px} }
+
+  /* seletor de idioma */
+  .brand-short{display:none}
+  .lang-sw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang-sw button{font-family:"IBM Plex Mono",monospace;font-size:11px;background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);padding:7px 9px;cursor:pointer;transition:.15s}
+  .lang-sw button:last-child{border-right:0}
+  .lang-sw button:hover{color:var(--paper)}
+  .lang-sw button.active{background:var(--trace);color:var(--ink);font-weight:600}
+  @media(max-width:760px){
+    .nav .wrap{padding:0 14px}
+    .nav nav{gap:8px}
+    .nav nav a.hideable{display:none}
+    .brand-full{display:none}
+    .brand-short{display:inline}
+    .brand{font-size:12px;gap:8px;flex:none}
+    .lang-sw button{padding:5px 7px;font-size:10px}
+    .theme-btn{width:30px;height:30px}
+    .cta-mini{padding:7px 11px;font-size:11px;white-space:nowrap}
+  }
+  @media(max-width:380px){
+    .brand{font-size:11px}
+    .lang-sw button{padding:4px 6px}
+    .theme-btn{width:28px;height:28px}
+    .cta-mini{padding:6px 9px;font-size:10.5px}
+  }
+
+  /* seletor de idioma */
+  .brand-short{display:none}
+  .lang-sw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang-sw button{font-family:"IBM Plex Mono",monospace;font-size:11px;background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);padding:7px 9px;cursor:pointer;transition:.15s}
+  .lang-sw button:last-child{border-right:0}
+  .lang-sw button:hover{color:var(--paper)}
+  .lang-sw button.active{background:var(--trace);color:var(--ink);font-weight:600}
+  @media(max-width:760px){
+    .nav .wrap{padding:0 14px}
+    .nav nav{gap:8px}
+    .nav nav a.hideable{display:none}
+    .brand-full{display:none}
+    .brand-short{display:inline}
+    .brand{font-size:12px;gap:8px;flex:none}
+    .lang-sw button{padding:5px 7px;font-size:10px}
+    .theme-btn{width:30px;height:30px}
+    .cta-mini{padding:7px 11px;font-size:11px;white-space:nowrap}
+  }
+  @media(max-width:380px){
+    .brand{font-size:11px}
+    .lang-sw button{padding:4px 6px}
+    .theme-btn{width:28px;height:28px}
+    .cta-mini{padding:6px 9px;font-size:10.5px}
+  }
+  /* controlos do osciloscopio */
+  .wb{display:inline-flex;align-items:center}
+  .wi{width:20px;height:11px;margin-right:5px;flex:none}
+  .wi path{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+  #scopeCanvas{touch-action:pan-y}
+  .hold-btn{font-family:"IBM Plex Mono",monospace;font-size:10px;background:transparent;border:1px solid var(--screen-grid);color:var(--screen-text);padding:2px 8px;border-radius:5px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+  .hold-btn:hover{color:var(--screen-trace)}
+  .hold-btn.on{color:var(--mark);border-color:var(--mark)}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot"></span><span class="brand-full">IDALGÍZIO_GOMES // EEC</span><span class="brand-short">IG // EEC</span></a>
+    <nav>
+      <a class="hideable" href="#projetos" data-i18n="navProjects">Projetos</a>
+      <a class="hideable" href="#competencias" data-i18n="navSkills">Competências</a>
+      <a class="hideable" href="#sobre" data-i18n="navAbout">Sobre</a>
+      <div class="lang-sw" id="langSw"><button data-lang="pt" class="active">PT</button><button data-lang="en">EN</button><button data-lang="zh">中文</button></div>
+      <button class="theme-btn" id="themeBtn" aria-label="theme" data-i18n-title="themeTitle" title="Modo claro / escuro">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <a class="cta-mini" href="#contacto" data-i18n="navContact">Contactar</a>
+    </nav>
+  </div>
+</header>
+<div id="top"></div>
+<section class="hero"><div class="wrap">
+  <div class="eyebrow reveal" data-i18n="heroEyebrow">Eng.ª Eletrotécnica e de Computadores · IPCA · Barcelos</div>
+  <h1 class="name reveal">Idalgízio Gomes<span class="lo" data-i18n="heroSubtitle">Hardware → Firmware → Software, do circuito ao dashboard.</span></h1>
+  <p class="lede reveal" data-i18n-html="heroLede">Construo o caminho completo de um sistema: <strong>condiciono o sinal analógico</strong>, <strong>escrevo o firmware embebido</strong> que o lê, e <strong>levo os dados até uma interface</strong> que alguém usa. Esta galeria mostra projetos reais — não slides — com a medição que comprova que funcionam.</p>
+  <div class="scope reveal">
+    <div class="scope-bar">
+      <span class="grp">CH1 <span class="ch" data-i18n="scopeSignal">SINAL</span>
+        <span class="wave-btns">
+          <button class="wb active" data-wave="sine"><svg class="wi" viewBox="0 0 22 12"><path d="M1 6 Q3.5 1 6 6 T11 6 T16 6 T21 6"/></svg><span class="wl">SENO</span></button>
+          <button class="wb" data-wave="square"><svg class="wi" viewBox="0 0 22 12"><path d="M1 9 H4 V3 H9 V9 H14 V3 H19 V9 H21"/></svg><span class="wl">QUADRADA</span></button>
+          <button class="wb" data-wave="emg"><svg class="wi" viewBox="0 0 22 12"><path d="M1 6 H6 L7 2 L8 10 L9 3 L10 9 L11 6 H15 L16 3 L17 9 L18 6 H21"/></svg><span class="wl">EMG</span></button>
+          <button class="wb" data-wave="step"><svg class="wi" viewBox="0 0 22 12"><path d="M1 9 H9 V3 H21"/></svg><span class="wl">DEGRAU</span></button>
+        </span>
+      </span>
+      <span class="grp"><span id="tdiv">5.0 ms/div</span><button class="hold-btn" id="holdBtn"><span class="hg">⏸</span><span class="wl">HOLD</span></button><span class="leds"><i class="on"></i><i class="on"></i><i id="ledHold"></i><i class="on"></i></span></span>
+    </div>
+    <canvas id="scopeCanvas"></canvas>
+    <span class="scope-hint" id="scopeHint" data-i18n="scopeHint">passa o rato ou arrasta o dedo sobre o sinal · roda p/ zoom · escolhe o sinal ↑</span>
+    <span class="scope-read" id="scopeRead">TRIG ▸ AUTO · Vpp 4.98V</span>
+  </div>
+  <div class="stats">
+    <div class="stat reveal"><b>10+</b><span data-i18n="statProjects">PROJETOS DE ENGENHARIA</span></div>
+    <div class="stat reveal"><b>4</b><span data-i18n="statDomains">DOMÍNIOS: HW·FW·CTRL·DADOS</span></div>
+    <div class="stat reveal"><b>KiCad</b><span data-i18n="statPCB">PCBs PRÓPRIAS · VALIDADAS</span></div>
+    <div class="stat reveal"><b>C/C++</b><span data-i18n="statCode">ASM · PYTHON · SQL</span></div>
+  </div>
+</div></section>
+<section id="sobre" class="about"><div class="wrap">
+  <div class="sec-head reveal"><div><span class="idx">// 01</span><h2 data-i18n="aboutH2">Quem está por trás dos projetos</h2></div><p data-i18n="aboutSecP">O perfil técnico, em linguagem de quem contrata.</p></div>
+  <p class="reveal" data-i18n-html="aboutP1">Sou estudante finalista de <strong>Engenharia Eletrotécnica e de Computadores</strong> na Escola Superior de Tecnologia do IPCA. Antes da universidade tirei o curso de <strong>Eletrotecnia e Automação Industrial</strong> e trabalhei em obra como ajudante de eletricista — por isso a parte prática, de bancada e de campo, não me assusta: já soldei, montei quadros e medi tensões em sítios reais.</p>
+  <p class="reveal" style="margin-top:18px" data-i18n-html="aboutP2">O que me distingue de muitos colegas é a <strong>amplitude da cadeia</strong> que consigo cobrir sozinho. No mesmo ano dimensionei um amplificador de potência de áudio (com PCB e validação por FFT), escrevi firmware bare-metal em assembly para um PIC, fiz dois microcontroladores falarem por UART e servi os dados numa página web, fechei uma malha de controlo PID num motor, e modelei bases de dados em 3ª forma normal. <strong>Não sou só hardware nem só software — sou a ponte.</strong></p>
+  <p class="quote reveal" data-i18n="aboutQuote">“Procuro um emprego onde possa transformar um requisito numa placa que funciona e num programa que a controla.”</p>
+</div></section>
+<section id="projetos"><div class="wrap">
+  <div class="sec-head reveal"><div><span class="idx">// 02</span><h2 data-i18n="projH2">Galeria de projetos</h2></div><p data-i18n="projSecP">Cada cartão tem a sua assinatura de sinal. Passa o rato para o ver “ao vivo” e toca para abrir os detalhes.</p></div>
+  <div class="filters reveal" id="filters">
+    <button class="active" data-f="all" data-i18n="filterAll">Todos</button>
+    <button data-f="hw" data-i18n="filterHW">Hardware & Potência</button>
+    <button data-f="fw" data-i18n="filterFW">Sistemas Embebidos</button>
+    <button data-f="ctrl" data-i18n="filterCtrl">Controlo & Automação</button>
+    <button data-f="sw" data-i18n="filterSW">Software & Dados</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div></section>
+<section id="competencias"><div class="wrap">
+  <div class="sec-head reveal"><div><span class="idx">// 03</span><h2 data-i18n="skillsH2">Competências, medidas</h2></div><p data-i18n="skillsSecP">Nível auto-avaliado, ancorado em projetos concretos — não em cursos vistos.</p></div>
+  <div class="skills-grid" id="skillsGrid"></div>
+</div></section>
+<section id="contacto"><div class="wrap">
+  <div class="contact reveal">
+    <h2 data-i18n="contactH2">Pronto para o próximo desafio</h2>
+    <p data-i18n="contactP">Disponível para emprego em eletrónica, sistemas embebidos, automação ou desenvolvimento. Norte de Portugal ou remoto.</p>
+    <div class="btns">
+      <a class="btn primary" href="mailto:idalgizio12@gmail.com">▸ idalgizio12@gmail.com</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/idalgizio-gomes-68526628b/" target="_blank" rel="noopener">in · LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/idalgizio-gomes" target="_blank" rel="noopener">⌥ GitHub</a>
+    </div>
+  </div>
+</div></section>
+<footer><div class="wrap"><span data-i18n="footerLeft">© 2026 IDALGÍZIO C. B. GOMES — Portfólio EEC</span><span data-i18n="footerRight">Construído como bancada de laboratório · v4.0</span></div></footer>
+
+<script>
+
+const I18N = {"pt": {"ui": {"navProjects": "Projetos", "navSkills": "Competências", "navAbout": "Sobre", "navContact": "Contactar", "themeTitle": "Modo claro / escuro", "heroEyebrow": "Eng.ª Eletrotécnica e de Computadores · IPCA · Barcelos", "heroSubtitle": "Hardware → Firmware → Software, do circuito ao dashboard.", "heroLede": "Construo o caminho completo de um sistema: <strong>condiciono o sinal analógico</strong>, <strong>escrevo o firmware embebido</strong> que o lê, e <strong>levo os dados até uma interface</strong> que alguém usa. Esta galeria mostra projetos reais — não slides — com a medição que comprova que funcionam.", "scopeSignal": "SINAL", "waveSine": "SENO", "waveSquare": "QUADRADA", "waveEmg": "EMG", "waveStep": "DEGRAU", "scopeHint": "passa o rato ou arrasta o dedo sobre o sinal · roda p/ zoom · escolhe o sinal ↑", "scopeTrig": "TRIG ▸ AUTO · Vpp 4.98V", "scopeHold": "HOLD ▸ congelado", "cursorLbl": "CURSOR", "holdLbl": "HOLD", "holdBtn": "HOLD", "runBtn": "RUN", "statProjects": "PROJETOS DE ENGENHARIA", "statDomains": "DOMÍNIOS: HW·FW·CTRL·DADOS", "statPCB": "PCBs PRÓPRIAS · VALIDADAS", "statCode": "ASM · PYTHON · SQL", "aboutH2": "Quem está por trás dos projetos", "aboutSecP": "O perfil técnico, em linguagem de quem contrata.", "aboutP1": "Sou estudante finalista de <strong>Engenharia Eletrotécnica e de Computadores</strong> na Escola Superior de Tecnologia do IPCA. Antes da universidade tirei o curso de <strong>Eletrotecnia e Automação Industrial</strong> e trabalhei em obra como ajudante de eletricista — por isso a parte prática, de bancada e de campo, não me assusta: já soldei, montei quadros e medi tensões em sítios reais.", "aboutP2": "O que me distingue de muitos colegas é a <strong>amplitude da cadeia</strong> que consigo cobrir sozinho. No mesmo ano dimensionei um amplificador de potência de áudio (com PCB e validação por FFT), escrevi firmware bare-metal em assembly para um PIC, fiz dois microcontroladores falarem por UART e servi os dados numa página web, fechei uma malha de controlo PID num motor, e modelei bases de dados em 3ª forma normal. <strong>Não sou só hardware nem só software — sou a ponte.</strong>", "aboutQuote": "“Procuro um emprego onde possa transformar um requisito numa placa que funciona e num programa que a controla.”", "projH2": "Galeria de projetos", "projSecP": "Cada cartão tem a sua assinatura de sinal. Passa o rato para o ver “ao vivo” e toca para abrir os detalhes.", "filterAll": "Todos", "filterHW": "Hardware & Potência", "filterFW": "Sistemas Embebidos", "filterCtrl": "Controlo & Automação", "filterSW": "Software & Dados", "moreDetails": "Detalhes técnicos", "whatIDid": "O que fiz", "howUseful": "Como lhe sou útil", "skillsH2": "Competências, medidas", "skillsSecP": "Nível auto-avaliado, ancorado em projetos concretos — não em cursos vistos.", "contactH2": "Pronto para o próximo desafio", "contactP": "Disponível para emprego em eletrónica, sistemas embebidos, automação ou desenvolvimento. Norte de Portugal ou remoto.", "footerLeft": "© 2026 IDALGÍZIO C. B. GOMES — Portfólio EEC", "footerRight": "Construído como bancada de laboratório · v4.0"}, "projects": [{"cat": "hw", "trace": "emg", "tag": "Analógico · Biomédico", "uc": "Eletrónica II", "title": "Aquisição de Sinais Mioelétricos (EMG)", "sum": "Cadeia de acondicionamento que pega num sinal muscular de microvolts e entrega-o limpo a 0–5 V para controlar uma prótese/ortose robótica.", "chips": ["Amp. instrumentação", "Filtro ativo passa-banda", "Retificador de precisão", "TL081/UA741"], "how": "Eu projeto cadeias de sinal de baixíssima amplitude com rejeição de ruído — exatamente o que equipamento médico, sensores e instrumentação industrial exigem.", "details": ["Amplificador de instrumentação para amplificar a diferença e rejeitar ruído de modo comum (CMRR).", "Filtro ativo passa-banda (~20–500 Hz) para isolar a banda útil do EMG.", "Andar não inversor para elevar até ao fundo de escala do ADC.", "Detetor de pico / retificador de onda completa de precisão para extrair a envolvente."]}, {"cat": "hw", "trace": "audio", "tag": "Eletrónica de Potência", "uc": "Eletrónica de Potência", "title": "Amplificador de Áudio Hi-Fi LM3886", "sum": "Projeto, dimensionamento e validação experimental de um amplificador estéreo Classe AB — do cálculo térmico à PCB e à análise FFT.", "chips": ["Classe AB", "Redes Zobel & Thiele", "Cálculo térmico", "PCB", "Validação FFT"], "how": "Levo um circuito de potência da folha de cálculo à placa medida no laboratório, com gestão térmica e estabilidade tratadas a sério.", "details": ["Ganho fixado em 26,4 dB; banda útil delimitada (1,69 Hz – 234 kHz).", "Dissipador calculado para 0,44 °C/W → junção segura abaixo de 150 °C a 46,8 W.", "Estabilidade garantida com rede Zobel (carga indutiva) e rede de Thiele (capacitiva).", "Validação por osciloscópio e FFT: ganho medido 26,66 dB, harmónicos atenuados, sem oscilações parasitas."]}, {"cat": "fw", "trace": "packet", "tag": "IoT · Dois MCUs", "uc": "Microcontroladores", "title": "Monitor Ambiental com Webserver", "sum": "Arduino lê temperatura/humidade por I2C, fala com um AVR Butterfly por UART, e um servidor Python multithread publica os dados numa página web.", "chips": ["I2C · UART", "Máquina de estados", "Python threading", "Sensor HTU21D"], "how": "Integro sensor → microcontrolador → rede → interface, e documento o debugging passo a passo até funcionar.", "details": ["Leitura do HTU21D por I2C a 400 kHz, com conversão segundo as fórmulas do datasheet.", "Comunicação UART entre dois MCUs (9600 bps, sinal invertido) — três bugs de comunicação isolados e resolvidos.", "Máquina de estados de 4 estados com menu navegável por joystick e timeout.", "Webserver em Python com duas threads e acesso protegido por lock; página HTTP com auto-refresh."]}, {"cat": "fw", "trace": "quant", "tag": "Assembly · Bare-metal", "uc": "Microcontroladores", "title": "Sistema de Temperatura em PIC 16F887", "sum": "Medição de temperatura programada inteiramente em assembly: conversão A/D, interrupções e displays de 7 segmentos, com PCB própria e simulação em Proteus.", "chips": ["Assembly MPLAB X", "Conversão A/D", "Interrupções (ISR)", "7 segmentos", "Proteus"], "how": "Quando é preciso código eficiente e próximo do hardware, escrevo-o ao nível do registo — sem depender de bibliotecas.", "details": ["Programa em assembly: configuração de portos, conversor A/D e bits de interrupção à mão.", "ISR de A/D e interrupção externa por botão, com gestão de contexto.", "Tabela de consulta para conversão tensão→valor e multiplexagem de displays.", "PCB desenhada em EAGLE e circuito validado em simulação Proteus."]}, {"cat": "ctrl", "trace": "pid", "tag": "Controlo · Malha fechada", "uc": "Máquinas Elétricas", "title": "Controlo de Velocidade por PID", "sum": "Malha fechada que regula a velocidade de um motor: encoder ótico mede RPM por interrupção, o PID corrige e o PWM atua, com sintonia e identificação do sistema.", "chips": ["PID", "Encoder ótico", "PWM", "Identificação de sistema"], "how": "Fecho malhas de controlo reais — mede, compara, corrige — a competência base de robótica, motores e processos industriais.", "details": ["Encoder ótico de 40 pulsos/volta lido por interrupção para estimar RPM em tempo real.", "Controlador PID (Kp/Ki/Kd) com limites de saída e tempo de amostragem definidos.", "Atuação por PWM no motor; visualização em Serial Plotter.", "Identificação do sistema (reta de calibração) e sequências de teste automáticas."]}, {"cat": "ctrl", "trace": "ladder", "tag": "Automação · Indústria 4.0", "uc": "Automação", "title": "Linha de Produção Automatizada", "sum": "Projeto de automação flexível com PLC físico, I/O digitais e analógicos, interface HMI e fábrica virtual em Factory IO, incluindo emergência, paragem e rearme.", "chips": ["PLC NX", "HMI", "Factory IO", "I/O analógico/digital", "Blocos de função"], "how": "Programo PLCs e faço a supervisão por HMI — a espinha dorsal de qualquer chão de fábrica automatizado.", "details": ["Programação de PLC físico com I/O digitais e analógicos reais.", "Interface gráfica HMI para arranque, supervisão e comando do processo.", "Fábrica/linha modelada em Factory IO, arrancável por HMI ou equipamento físico.", "Sequências de emergência, paragem e rearme; blocos de função para reutilização de código."]}, {"cat": "sw", "trace": "uml", "tag": "C++ · POO · Qt", "uc": "Programação Orientada a Objetos", "title": "Sistema de Controlo de Acessos", "sum": "Aplicação em C++ que gere entradas e saídas de pessoas e veículos: modelo orientado a objetos com herança, exceções e interface gráfica em Qt.", "chips": ["C++", "Herança", "Exceções", "Qt"], "how": "Modelo domínios reais em código limpo e estruturado, com interface para o utilizador final.", "details": ["Hierarquia de classes (Pessoa, Veículo, Sensor, Semáforo, Gestor de Acesso) com herança.", "Tratamento de erros com exceções próprias e validação de regras de acesso.", "Registo de acessos e lógica de controlo de entradas/saídas.", "Interface gráfica construída em Qt Creator."]}, {"cat": "sw", "trace": "table", "tag": "Bases de Dados · SQL", "uc": "Armazenamento e Acesso a Dados", "title": "Base de Dados de Automobilismo — 24h de Le Mans", "sum": "Modelo relacional completo das 24 Horas de Le Mans: diagrama entidade-relação, normalização até à 3ª forma normal e queries analíticas em SQL.", "chips": ["Modelação ER", "Normalização 3FN", "SQL DDL/DML", "Relações M:N"], "how": "Modelo, normalizo e interrogo dados — para que a informação fique consistente e pronta a analisar.", "details": ["DER com 7 entidades e cardinalidades; tabela central de participações como nó do modelo.", "Resolução da relação muitos-para-muitos (pilotos↔participações) com tabela de junção.", "Scripts SQL de criação e povoamento com integridade referencial (chaves estrangeiras).", "Segundo projeto (Cinocultura) a modelar requisitos reais de negócio em 3FN."]}, {"cat": "sw", "trace": "scatter", "tag": "Estatística · SPSS", "uc": "Estatística", "title": "Análise de Desempenho de Sistemas", "sum": "Estudo estatístico sobre o que influencia o desempenho de sistemas computacionais: estatística descritiva e inferencial, testes de hipóteses e regressão em SPSS.", "chips": ["SPSS", "Testes de hipóteses", "Amostras emparelhadas", "Regressão"], "how": "Transformo dados em decisões — desenho o estudo, aplico o teste certo e interpreto o resultado.", "details": ["Definição de variáveis (frequência, núcleos, otimização, arquitetura) e questão de investigação.", "Estatística descritiva e inferencial sobre o tempo de execução como variável-resposta.", "Testes para amostras emparelhadas (antes/depois de otimização) e regressão.", "Conclusões sobre os fatores que melhor explicam o desempenho."]}, {"cat": "sw", "trace": "threads", "tag": "Sistemas · Concorrência", "uc": "Arquitetura de Sistemas Computacionais", "title": "Arquitetura de Computadores & Multithreading", "sum": "Programação de sistemas em baixo nível: análise de assembly RISC-V (prólogo/epílogo, syscalls) e um servidor web multithread em C com pthreads.", "chips": ["Assembly RISC-V", "pthreads", "Servidor multithread", "C"], "how": "Percebo o que acontece por baixo do código — registos, stack e concorrência — o que ajuda a otimizar e a depurar firmware.", "details": ["Análise do prólogo e epílogo de funções em assembly RISC-V e gestão da stack.", "Chamadas ao sistema (ecall) para entrada/saída e cálculo (ex.: fatorial).", "Servidor web em C com múltiplas threads (pthreads) a servir pedidos em paralelo.", "Controlo de sensores integrado no mesmo contexto de sistemas."]}], "skills": [{"title": "Hardware & Eletrónica", "role": "// bancada · medição · pcb", "rows": [{"label": "Eletrónica analógica (op-amps, filtros)", "level": "avançado", "w": 88}, {"label": "Desenho de PCB (KiCad / EAGLE)", "level": "sólido", "w": 80}, {"label": "Instrumentação (osciloscópio, FFT)", "level": "sólido", "w": 76}, {"label": "Eletrónica de potência / térmica", "level": "sólido", "w": 74}]}, {"title": "Embebidos & Firmware", "role": "// mcu · protocolos · tempo-real", "rows": [{"label": "Microcontroladores (PIC, AVR, Arduino)", "level": "avançado", "w": 85}, {"label": "Sistemas de controlo (PID, malha fechada)", "level": "sólido", "w": 80}, {"label": "Assembly / programação bare-metal", "level": "sólido", "w": 74}, {"label": "Protocolos I2C · UART · SPI", "level": "sólido", "w": 78}]}, {"title": "Software & Dados", "role": "// automação · bd · código", "rows": [{"label": "Automação industrial (PLC, HMI, Factory IO)", "level": "avançado", "w": 86}, {"label": "Bases de dados & SQL (modelação, 3FN)", "level": "avançado", "w": 84}, {"label": "C / C++ (POO, Qt)", "level": "sólido", "w": 78}, {"label": "Python (aquisição, web, threading)", "level": "sólido", "w": 74}]}]}, "en": {"ui": {"navProjects": "Projects", "navSkills": "Skills", "navAbout": "About", "navContact": "Contact", "themeTitle": "Light / dark mode", "heroEyebrow": "Electrical & Computer Engineering · IPCA · Barcelos", "heroSubtitle": "Hardware → Firmware → Software, from circuit to dashboard.", "heroLede": "I build the complete path of a system: <strong>I condition the analog signal</strong>, <strong>write the embedded firmware</strong> that reads it, and <strong>carry the data to an interface</strong> someone uses. This gallery shows real projects — not slides — with the measurements that prove they work.", "scopeSignal": "SIGNAL", "waveSine": "SINE", "waveSquare": "SQUARE", "waveEmg": "EMG", "waveStep": "STEP", "scopeHint": "hover or drag your finger over the signal · scroll to zoom · pick the signal ↑", "scopeTrig": "TRIG ▸ AUTO · Vpp 4.98V", "scopeHold": "HOLD ▸ frozen", "cursorLbl": "CURSOR", "holdLbl": "HOLD", "holdBtn": "HOLD", "runBtn": "RUN", "statProjects": "ENGINEERING PROJECTS", "statDomains": "DOMAINS: HW·FW·CTRL·DATA", "statPCB": "OWN PCBs · VALIDATED", "statCode": "ASM · PYTHON · SQL", "aboutH2": "Who's behind the projects", "aboutSecP": "The technical profile, in the language of those who hire.", "aboutP1": "I am a final-year <strong>Electrical and Computer Engineering</strong> student at IPCA's School of Technology. Before university I completed a course in <strong>Industrial Electrical Engineering and Automation</strong> and worked on site as an electrician's assistant — so the hands-on side, at the bench and in the field, doesn't scare me: I have soldered, wired panels and measured voltages in real places.", "aboutP2": "What sets me apart from many peers is the <strong>breadth of the chain</strong> I can cover on my own. In a single year I designed an audio power amplifier (with PCB and FFT validation), wrote bare-metal assembly firmware for a PIC, made two microcontrollers talk over UART and served the data on a web page, closed a PID control loop on a motor, and modelled databases in third normal form. <strong>I'm not only hardware nor only software — I'm the bridge.</strong>", "aboutQuote": "“I'm looking for a job where I can turn a requirement into a board that works and a program that controls it.”", "projH2": "Project gallery", "projSecP": "Each card has its own signal signature. Hover to see it “live” and tap to open the details.", "filterAll": "All", "filterHW": "Hardware & Power", "filterFW": "Embedded Systems", "filterCtrl": "Control & Automation", "filterSW": "Software & Data", "moreDetails": "Technical details", "whatIDid": "What I did", "howUseful": "How I can help you", "skillsH2": "Skills, measured", "skillsSecP": "Self-assessed level, anchored in concrete projects — not in courses watched.", "contactH2": "Ready for the next challenge", "contactP": "Available for a job in electronics, embedded systems, automation or development. North of Portugal or remote.", "footerLeft": "© 2026 IDALGÍZIO C. B. GOMES — ECE Portfolio", "footerRight": "Built like a lab bench · v4.0"}, "projects": [{"cat": "hw", "trace": "emg", "tag": "Analog · Biomedical", "uc": "Electronics II", "title": "Myoelectric (EMG) Signal Acquisition", "sum": "A conditioning chain that takes a microvolt muscle signal and delivers it clean at 0–5 V to control a robotic prosthesis/orthosis.", "chips": ["Instrumentation amp", "Active band-pass filter", "Precision rectifier", "TL081/UA741"], "how": "I design very-low-amplitude signal chains with noise rejection — exactly what medical equipment, sensors and industrial instrumentation require.", "details": ["Instrumentation amplifier to amplify the difference and reject common-mode noise (CMRR).", "Active band-pass filter (~20–500 Hz) to isolate the useful EMG band.", "Non-inverting stage to bring it up to the ADC full scale.", "Precision full-wave rectifier / peak detector to extract the envelope."]}, {"cat": "hw", "trace": "audio", "tag": "Power Electronics", "uc": "Power Electronics", "title": "LM3886 Hi-Fi Audio Amplifier", "sum": "Design, sizing and experimental validation of a Class-AB stereo amplifier — from thermal calculation to PCB and FFT analysis.", "chips": ["Class AB", "Zobel & Thiele networks", "Thermal calculation", "PCB", "FFT validation"], "how": "I take a power circuit from the spreadsheet to a board measured in the lab, with thermal management and stability taken seriously.", "details": ["Gain set at 26.4 dB; useful band defined (1.69 Hz – 234 kHz).", "Heatsink sized for 0.44 °C/W → junction safely below 150 °C at 46.8 W.", "Stability ensured with a Zobel network (inductive load) and a Thiele network (capacitive).", "Oscilloscope and FFT validation: measured gain 26.66 dB, attenuated harmonics, no parasitic oscillation."]}, {"cat": "fw", "trace": "packet", "tag": "IoT · Two MCUs", "uc": "Microcontrollers", "title": "Environmental Monitor with Webserver", "sum": "An Arduino reads temperature/humidity over I2C, talks to an AVR Butterfly over UART, and a multithreaded Python server publishes the data on a web page.", "chips": ["I2C · UART", "State machine", "Python threading", "HTU21D sensor"], "how": "I integrate sensor → microcontroller → network → interface, and document the debugging step by step until it works.", "details": ["HTU21D read over I2C at 400 kHz, converted using the datasheet formulas.", "UART communication between two MCUs (9600 bps, inverted signal) — three communication bugs isolated and fixed.", "4-state state machine with a joystick-navigable menu and timeout.", "Python webserver with two threads and lock-protected access; HTTP page with auto-refresh."]}, {"cat": "fw", "trace": "quant", "tag": "Assembly · Bare-metal", "uc": "Microcontrollers", "title": "Temperature System on PIC 16F887", "sum": "Temperature measurement programmed entirely in assembly: A/D conversion, interrupts and 7-segment displays, with a custom PCB and Proteus simulation.", "chips": ["MPLAB X assembly", "A/D conversion", "Interrupts (ISR)", "7-segment", "Proteus"], "how": "When efficient, close-to-the-hardware code is needed, I write it at register level — without relying on libraries.", "details": ["Assembly program: ports, A/D converter and interrupt bits configured by hand.", "A/D ISR and external button interrupt, with context handling.", "Lookup table for voltage→value conversion and display multiplexing.", "PCB designed in EAGLE and circuit validated in Proteus simulation."]}, {"cat": "ctrl", "trace": "pid", "tag": "Control · Closed-loop", "uc": "Electrical Machines", "title": "PID Speed Control", "sum": "A closed loop that regulates a motor's speed: an optical encoder measures RPM via interrupt, the PID corrects and PWM actuates, with tuning and system identification.", "chips": ["PID", "Optical encoder", "PWM", "System identification"], "how": "I close real control loops — measure, compare, correct — the core skill behind robotics, motors and industrial processes.", "details": ["40 pulses/rev optical encoder read by interrupt to estimate RPM in real time.", "PID controller (Kp/Ki/Kd) with defined output limits and sampling time.", "PWM actuation on the motor; visualization in the Serial Plotter.", "System identification (calibration line) and automatic test sequences."]}, {"cat": "ctrl", "trace": "ladder", "tag": "Automation · Industry 4.0", "uc": "Automation", "title": "Automated Production Line", "sum": "A flexible automation project with a physical PLC, digital and analog I/O, an HMI interface and a virtual factory in Factory IO, including emergency, stop and reset.", "chips": ["NX PLC", "HMI", "Factory IO", "Analog/digital I/O", "Function blocks"], "how": "I program PLCs and supervise them through an HMI — the backbone of any automated shop floor.", "details": ["Physical PLC programming with real digital and analog I/O.", "Graphical HMI interface to start, supervise and command the process.", "Factory/line modelled in Factory IO, startable from the HMI or physical equipment.", "Emergency, stop and reset sequences; function blocks for code reuse."]}, {"cat": "sw", "trace": "uml", "tag": "C++ · OOP · Qt", "uc": "Object-Oriented Programming", "title": "Access Control System", "sum": "A C++ application that manages the entry and exit of people and vehicles: an object-oriented model with inheritance, exceptions and a Qt graphical interface.", "chips": ["C++", "Inheritance", "Exceptions", "Qt"], "how": "I model real-world domains in clean, structured code, with an interface for the end user.", "details": ["Class hierarchy (Person, Vehicle, Sensor, Traffic Light, Access Manager) with inheritance.", "Error handling with custom exceptions and access-rule validation.", "Access logging and entry/exit control logic.", "Graphical interface built in Qt Creator."]}, {"cat": "sw", "trace": "table", "tag": "Databases · SQL", "uc": "Data Storage and Access", "title": "Motorsport Database — 24h of Le Mans", "sum": "A complete relational model of the 24 Hours of Le Mans: entity-relationship diagram, normalization up to third normal form and analytical SQL queries.", "chips": ["ER modelling", "3NF normalization", "SQL DDL/DML", "M:N relations"], "how": "I model, normalize and query data — so that the information stays consistent and ready to analyze.", "details": ["ER diagram with 7 entities and cardinalities; a central participations table as the hub of the model.", "Resolved the many-to-many relation (drivers↔participations) with a junction table.", "SQL scripts for creation and population with referential integrity (foreign keys).", "A second project (dog breeding) modelling real business requirements in 3NF."]}, {"cat": "sw", "trace": "scatter", "tag": "Statistics · SPSS", "uc": "Statistics", "title": "Systems Performance Analysis", "sum": "A statistical study of what influences the performance of computer systems: descriptive and inferential statistics, hypothesis tests and regression in SPSS.", "chips": ["SPSS", "Hypothesis tests", "Paired samples", "Regression"], "how": "I turn data into decisions — I design the study, apply the right test and interpret the result.", "details": ["Definition of variables (frequency, cores, optimization, architecture) and the research question.", "Descriptive and inferential statistics on execution time as the response variable.", "Paired-sample tests (before/after optimization) and regression.", "Conclusions on the factors that best explain performance."]}, {"cat": "sw", "trace": "threads", "tag": "Systems · Concurrency", "uc": "Computer Systems Architecture", "title": "Computer Architecture & Multithreading", "sum": "Low-level systems programming: RISC-V assembly analysis (prologue/epilogue, syscalls) and a multithreaded web server in C with pthreads.", "chips": ["RISC-V assembly", "pthreads", "Multithreaded server", "C"], "how": "I understand what happens beneath the code — registers, stack and concurrency — which helps optimize and debug firmware.", "details": ["Analysis of function prologue and epilogue in RISC-V assembly and stack management.", "System calls (ecall) for I/O and computation (e.g. factorial).", "Web server in C with multiple threads (pthreads) serving requests in parallel.", "Sensor control integrated in the same systems context."]}], "skills": [{"title": "Hardware & Electronics", "role": "// bench · measurement · pcb", "rows": [{"label": "Analog electronics (op-amps, filters)", "level": "advanced", "w": 88}, {"label": "PCB design (KiCad / EAGLE)", "level": "solid", "w": 80}, {"label": "Instrumentation (oscilloscope, FFT)", "level": "solid", "w": 76}, {"label": "Power electronics / thermal", "level": "solid", "w": 74}]}, {"title": "Embedded & Firmware", "role": "// mcu · protocols · real-time", "rows": [{"label": "Microcontrollers (PIC, AVR, Arduino)", "level": "advanced", "w": 85}, {"label": "Control systems (PID, closed-loop)", "level": "solid", "w": 80}, {"label": "Assembly / bare-metal programming", "level": "solid", "w": 74}, {"label": "Protocols I2C · UART · SPI", "level": "solid", "w": 78}]}, {"title": "Software & Data", "role": "// automation · db · code", "rows": [{"label": "Industrial automation (PLC, HMI, Factory IO)", "level": "advanced", "w": 86}, {"label": "Databases & SQL (modelling, 3NF)", "level": "advanced", "w": 84}, {"label": "C / C++ (OOP, Qt)", "level": "solid", "w": 78}, {"label": "Python (acquisition, web, threading)", "level": "solid", "w": 74}]}]}, "zh": {"ui": {"navProjects": "项目", "navSkills": "技能", "navAbout": "关于", "navContact": "联系", "themeTitle": "浅色 / 深色模式", "heroEyebrow": "电气与计算机工程 · IPCA 理工学院 · 巴塞卢斯", "heroSubtitle": "硬件 → 固件 → 软件，从电路到仪表板。", "heroLede": "我构建一个系统的完整链路：<strong>调理模拟信号</strong>、<strong>编写读取信号的嵌入式固件</strong>，并<strong>把数据送到供人使用的界面</strong>。本展示呈现的是真实项目——而非幻灯片——并附上证明其有效的实测数据。", "scopeSignal": "信号", "waveSine": "正弦", "waveSquare": "方波", "waveEmg": "EMG 肌电", "waveStep": "阶跃", "scopeHint": "在信号上移动鼠标或滑动手指 · 滚轮缩放 · 在上方选择信号 ↑", "scopeTrig": "TRIG ▸ AUTO · Vpp 4.98V", "scopeHold": "HOLD ▸ 已冻结", "cursorLbl": "光标", "holdLbl": "保持", "holdBtn": "保持", "runBtn": "运行", "statProjects": "工程项目", "statDomains": "领域：硬件·固件·控制·数据", "statPCB": "自制 PCB · 已验证", "statCode": "ASM · PYTHON · SQL", "aboutH2": "项目背后的人", "aboutSecP": "技术档案，用招聘方的语言呈现。", "aboutP1": "我是 IPCA 理工学院<strong>电气与计算机工程</strong>专业的应届毕业生。上大学之前，我修读了<strong>工业电气与自动化</strong>课程，并作为电工助理在工地工作过——因此动手实践，无论是在工作台还是在现场，我都不怵：我焊接过、接过配电柜，也在真实场所测过电压。", "aboutP2": "真正让我区别于许多同学的，是我能独自覆盖的<strong>链路广度</strong>。在同一年里，我设计了一台音频功率放大器（含 PCB 与 FFT 验证），为 PIC 单片机编写了裸机汇编固件，让两块单片机通过 UART 通信并将数据呈现在网页上，在电机上闭合了 PID 控制环，还以第三范式建立了数据库模型。<strong>我不只是硬件，也不只是软件——我是两者之间的桥梁。</strong>", "aboutQuote": "“我希望找到一份工作，让我能把一项需求转化为一块可用的电路板，以及一段控制它的程序。”", "projH2": "项目展示", "projSecP": "每张卡片都有自己的信号特征。移动鼠标可“实时”查看，点击可展开细节。", "filterAll": "全部", "filterHW": "硬件与功率", "filterFW": "嵌入式系统", "filterCtrl": "控制与自动化", "filterSW": "软件与数据", "moreDetails": "技术细节", "whatIDid": "我做了什么", "howUseful": "我能为您带来什么", "skillsH2": "量化技能", "skillsSecP": "自评水平，以具体项目为依据——而非以上过的课程为依据。", "contactH2": "准备好迎接下一个挑战", "contactP": "可从事电子、嵌入式系统、自动化或开发方面的工作。葡萄牙北部或远程均可。", "footerLeft": "© 2026 IDALGÍZIO C. B. GOMES — 电子与计算机工程作品集", "footerRight": "如实验室工作台般打造 · v4.0"}, "projects": [{"cat": "hw", "trace": "emg", "tag": "模拟 · 生物医学", "uc": "电子学 II", "title": "肌电（EMG）信号采集", "sum": "一条信号调理链，将微伏级的肌肉信号处理为干净的 0–5 V 输出，用于控制机器人假肢/矫形器。", "chips": ["仪表放大器", "有源带通滤波器", "精密整流器", "TL081/UA741"], "how": "我能设计具备抗噪能力的极低幅值信号链——这正是医疗设备、传感器与工业仪表所需要的。", "details": ["仪表放大器用于放大差分信号并抑制共模噪声（CMRR）。", "有源带通滤波器（约 20–500 Hz）以隔离有用的 EMG 频段。", "同相放大级将信号提升至 ADC 满量程。", "精密全波整流器 / 峰值检测器以提取包络。"]}, {"cat": "hw", "trace": "audio", "tag": "功率电子", "uc": "功率电子", "title": "LM3886 Hi-Fi 音频放大器", "sum": "一台 AB 类立体声放大器的设计、参数计算与实验验证——从热设计到 PCB 与 FFT 分析。", "chips": ["AB 类", "Zobel 与 Thiele 网络", "热设计计算", "PCB", "FFT 验证"], "how": "我能把一个功率电路从计算表格做到在实验室实测的电路板，并认真处理热管理与稳定性。", "details": ["增益设定为 26.4 dB；有用频带确定为（1.69 Hz – 234 kHz）。", "散热器按 0.44 °C/W 设计 → 在 46.8 W 下结温安全地低于 150 °C。", "通过 Zobel 网络（感性负载）与 Thiele 网络（容性负载）保证稳定性。", "示波器与 FFT 验证：实测增益 26.66 dB，谐波被抑制，无寄生振荡。"]}, {"cat": "fw", "trace": "packet", "tag": "物联网 · 双单片机", "uc": "单片机", "title": "带网页服务器的环境监测器", "sum": "Arduino 通过 I2C 读取温湿度，经 UART 与 AVR Butterfly 通信，并由多线程 Python 服务器将数据发布到网页。", "chips": ["I2C · UART", "状态机", "Python 多线程", "HTU21D 传感器"], "how": "我能打通传感器 → 单片机 → 网络 → 界面的整条链路，并逐步记录调试过程直到其正常运行。", "details": ["通过 I2C 以 400 kHz 读取 HTU21D，并按数据手册公式换算。", "两块单片机之间的 UART 通信（9600 bps，信号反相）——定位并修复了三个通信缺陷。", "4 状态的状态机，配合可用摇杆导航的菜单与超时机制。", "采用双线程、带锁保护访问的 Python 网页服务器；HTTP 页面自动刷新。"]}, {"cat": "fw", "trace": "quant", "tag": "汇编 · 裸机", "uc": "单片机", "title": "基于 PIC 16F887 的温度系统", "sum": "完全用汇编编写的温度测量：A/D 转换、中断与七段数码管显示，配自制 PCB 与 Proteus 仿真。", "chips": ["MPLAB X 汇编", "A/D 转换", "中断（ISR）", "七段显示", "Proteus"], "how": "当需要高效且贴近硬件的代码时，我能在寄存器级别编写——不依赖现成库。", "details": ["汇编程序：手动配置端口、A/D 转换器与中断位。", "A/D 中断服务程序与外部按键中断，并处理现场保护。", "用查找表完成电压→数值换算与数码管多路复用。", "用 EAGLE 设计 PCB，并在 Proteus 仿真中验证电路。"]}, {"cat": "ctrl", "trace": "pid", "tag": "控制 · 闭环", "uc": "电机学", "title": "PID 转速控制", "sum": "调节电机转速的闭环：光电编码器经中断测量转速，PID 校正、PWM 驱动，并进行整定与系统辨识。", "chips": ["PID", "光电编码器", "PWM", "系统辨识"], "how": "我能闭合真实的控制环——测量、比较、校正——这是机器人、电机与工业过程的核心能力。", "details": ["每转 40 脉冲的光电编码器经中断读取，实时估算转速。", "PID 控制器（Kp/Ki/Kd），设定了输出限幅与采样周期。", "通过 PWM 驱动电机；用串口绘图器（Serial Plotter）可视化。", "系统辨识（标定直线）与自动测试序列。"]}, {"cat": "ctrl", "trace": "ladder", "tag": "自动化 · 工业 4.0", "uc": "自动化", "title": "自动化生产线", "sum": "柔性自动化项目：实体 PLC、数字与模拟 I/O、HMI 界面，以及 Factory IO 虚拟工厂，包含急停、停止与复位。", "chips": ["NX PLC", "HMI", "Factory IO", "模拟/数字 I/O", "功能块"], "how": "我能编写 PLC 程序并通过 HMI 进行监控——这是任何自动化车间的支柱。", "details": ["对实体 PLC 编程，使用真实的数字与模拟 I/O。", "图形化 HMI 界面，用于启动、监控与指挥工艺过程。", "在 Factory IO 中建模的工厂/产线，可由 HMI 或实体设备启动。", "急停、停止与复位序列；用功能块实现代码复用。"]}, {"cat": "sw", "trace": "uml", "tag": "C++ · 面向对象 · Qt", "uc": "面向对象程序设计", "title": "门禁控制系统", "sum": "一个用 C++ 管理人员与车辆进出的应用：采用继承、异常处理的面向对象模型，并配有 Qt 图形界面。", "chips": ["C++", "继承", "异常处理", "Qt"], "how": "我能用整洁、结构化的代码为真实业务领域建模，并为最终用户提供界面。", "details": ["类层次结构（人员、车辆、传感器、信号灯、门禁管理器）并使用继承。", "用自定义异常进行错误处理，并校验门禁规则。", "访问记录以及进出控制逻辑。", "界面使用 Qt Creator 构建。"]}, {"cat": "sw", "trace": "table", "tag": "数据库 · SQL", "uc": "数据存储与访问", "title": "赛车数据库 — 勒芒 24 小时", "sum": "勒芒 24 小时耐力赛的完整关系模型：实体-关系图、规范化至第三范式，以及 SQL 分析查询。", "chips": ["ER 建模", "3NF 规范化", "SQL DDL/DML", "多对多关系"], "how": "我能对数据进行建模、规范化与查询——让信息保持一致并随时可供分析。", "details": ["含 7 个实体及基数的 ER 图；以中心化的参赛记录表作为模型枢纽。", "用连接表解决多对多关系（车手↔参赛记录）。", "用于建表与填充数据的 SQL 脚本，并保证参照完整性（外键）。", "第二个项目（犬类养殖）以 3NF 对真实业务需求建模。"]}, {"cat": "sw", "trace": "scatter", "tag": "统计学 · SPSS", "uc": "统计学", "title": "系统性能分析", "sum": "关于哪些因素影响计算机系统性能的统计研究：在 SPSS 中进行描述性与推断性统计、假设检验与回归分析。", "chips": ["SPSS", "假设检验", "配对样本", "回归分析"], "how": "我能把数据转化为决策——设计研究方案、选用恰当的检验并解读结果。", "details": ["定义变量（频率、核心数、优化、架构）并提出研究问题。", "以执行时间为响应变量进行描述性与推断性统计。", "配对样本检验（优化前/后）与回归分析。", "得出最能解释性能的因素结论。"]}, {"cat": "sw", "trace": "threads", "tag": "系统 · 并发", "uc": "计算机系统结构", "title": "计算机体系结构与多线程", "sum": "底层系统编程：RISC-V 汇编分析（函数序言/尾声、系统调用）以及用 C 与 pthreads 编写的多线程网页服务器。", "chips": ["RISC-V 汇编", "pthreads", "多线程服务器", "C"], "how": "我理解代码底层发生的事情——寄存器、栈与并发——这有助于优化和调试固件。", "details": ["分析 RISC-V 汇编中函数的序言与尾声以及栈管理。", "用系统调用（ecall）完成输入/输出与计算（如阶乘）。", "用 C 与多线程（pthreads）编写的网页服务器，并行处理请求。", "在同一系统环境中集成传感器控制。"]}], "skills": [{"title": "硬件与电子", "role": "// 工作台 · 测量 · PCB", "rows": [{"label": "模拟电子（运放、滤波器）", "level": "高级", "w": 88}, {"label": "PCB 设计（KiCad / EAGLE）", "level": "扎实", "w": 80}, {"label": "仪器测量（示波器、FFT）", "level": "扎实", "w": 76}, {"label": "功率电子 / 热设计", "level": "扎实", "w": 74}]}, {"title": "嵌入式与固件", "role": "// 单片机 · 协议 · 实时", "rows": [{"label": "单片机（PIC、AVR、Arduino）", "level": "高级", "w": 85}, {"label": "控制系统（PID、闭环）", "level": "扎实", "w": 80}, {"label": "汇编 / 裸机编程", "level": "扎实", "w": 74}, {"label": "协议 I2C · UART · SPI", "level": "扎实", "w": 78}]}, {"title": "软件与数据", "role": "// 自动化 · 数据库 · 代码", "rows": [{"label": "工业自动化（PLC、HMI、Factory IO）", "level": "高级", "w": 86}, {"label": "数据库与 SQL（建模、3NF）", "level": "高级", "w": 84}, {"label": "C / C++（面向对象、Qt）", "level": "扎实", "w": 78}, {"label": "Python（采集、网页、多线程）", "level": "扎实", "w": 74}]}]}};
+const LANGS=["pt","en","zh"];
+const root=document.documentElement;
+let CURLANG='pt', CUR=I18N.pt, curFilter='all';
+let TR='#34D8C6',GR='#19252b';
+function refreshScope(){const cs=getComputedStyle(document.body);TR=(cs.getPropertyValue('--screen-trace')||TR).trim();GR=(cs.getPropertyValue('--screen-grid')||GR).trim();}
+function applyTheme(theme){root.setAttribute('data-theme',theme);try{localStorage.setItem('theme',theme);}catch(e){}refreshScope();}
+(function(){let s=null;try{s=localStorage.getItem('theme');}catch(e){}const pl=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;applyTheme(s||(pl?'light':'dark'));if(window.matchMedia){window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{let v=null;try{v=localStorage.getItem('theme');}catch(_){}if(!v)applyTheme(e.matches?'light':'dark');});}})();
+document.getElementById('themeBtn').addEventListener('click',()=>applyTheme(root.getAttribute('data-theme')==='light'?'dark':'light'));
+
+/* ---- TRAÇOS SVG ---- */
+function trace(kind){
+  const w=400,H=134,C=67,m='var(--screen-trace)',d='var(--screen-trace-dim)';
+  const grid=`<rect width="${w}" height="${H}" fill="var(--screen)"/>`
+    +`<g stroke="var(--screen-grid)" stroke-width="1">`
+    +[...Array(8)].map((_,i)=>`<line x1="${i*50}" y1="31" x2="${i*50}" y2="103"/>`).join('')
+    +`<line x1="0" y1="${C}" x2="${w}" y2="${C}"/></g>`
+    +`<g stroke="var(--screen-grid)" stroke-width="1.2"><line x1="0" y1="31" x2="${w}" y2="31"/><line x1="0" y1="103" x2="${w}" y2="103"/></g>`;
+  let p='';
+  if(kind==='emg'){let s=`M0,${C} `;for(let x=0;x<=w;x+=4){const burst=(x>120&&x<200)||(x>250&&x<300);const b=burst?(Math.random()-.5)*40:(Math.random()-.5)*5;s+=`L${x},${C+b} `;}p=`<path d="${s}" fill="none" stroke="${m}" stroke-width="1.4"/>`;}
+  else if(kind==='audio'){let s=`M0,${C} `;for(let x=0;x<=w;x+=3){s+=`L${x},${C+Math.sin(x/18)*22+Math.sin(x/6)*3} `;}p=`<path d="${s}" fill="none" stroke="${m}" stroke-width="1.5"/>`;}
+  else if(kind==='packet'){let y=C+18,s=`M0,${y} `;for(let x=0;x<=w;x+=10){if(Math.random()>.55)y=(y===C+18)?C-18:C+18;s+=`L${x},${y} `;}p=`<path d="${s}" fill="none" stroke="${m}" stroke-width="1.6"/>`;}
+  else if(kind==='quant'){let y=C,s=`M0,${y} `;for(let x=0;x<=w;x+=26){y=(C+22)-Math.round((Math.sin(x/55)+1)*3)*7;s+=`L${x},${y} L${x+26},${y} `;}p=`<path d="${s}" fill="none" stroke="${m}" stroke-width="1.6"/>`;}
+  else if(kind==='pid'){const SP=C-12;let s=`M0,${C+20} L118,${C+20} `;for(let x=118;x<=w;x+=4){const tt=(x-118)/34;const y=SP+Math.exp(-tt/2.6)*Math.cos(tt)*18;s+=`L${x},${y} `;}p=`<line x1="118" y1="${SP}" x2="${w}" y2="${SP}" stroke="${d}" stroke-width="1" stroke-dasharray="3 4"/><path d="${s}" fill="none" stroke="${m}" stroke-width="1.6"/>`;}
+  else if(kind==='ladder'){let y=C+18,s=`M0,${y} `;for(let x=0;x<=w;x+=40){y=(y===C+18)?C-18:C+18;s+=`L${x},${y} `;}p=`<path d="${s}" fill="none" stroke="${m}" stroke-width="1.8"/>`;}
+  else if(kind==='uml'){const n=[[70,C-14],[200,C-22],[200,C+22],[330,C+2]];const links=`<path d="M70,${C-14} L200,${C-22} M70,${C-14} L200,${C+22} M200,${C-22} L330,${C+2} M200,${C+22} L330,${C+2}" stroke="${d}" stroke-width="1.2" fill="none"/>`;const dots=n.map(q=>`<rect x="${q[0]-13}" y="${q[1]-9}" width="26" height="18" rx="3" fill="var(--screen)" stroke="${m}" stroke-width="1.4"/>`).join('');p=links+dots;}
+  else if(kind==='table'){let g='';const ys=[C-22,C,C+22];for(let r=0;r<3;r++)for(let c=0;c<5;c++){g+=`<rect x="${40+c*64}" y="${ys[r]-9}" width="58" height="18" rx="2" fill="var(--screen)" stroke="${r===0?m:d}" stroke-width="1.2"/>`;}const scan=`<path d="M69,${ys[0]} L325,${ys[0]} L325,${ys[1]} L69,${ys[1]} L69,${ys[2]} L325,${ys[2]}" fill="none" stroke="none"/>`;p=scan+g;}
+  else if(kind==='scatter'){let dots='';for(let i=0;i<30;i++){const x=24+Math.random()*352;const y=(C+20)-(x/400)*40+(Math.random()-.5)*14;dots+=`<circle cx="${x}" cy="${y}" r="2.3" fill="${m}"/>`;}p=`<path d="M24,${C+20} L376,${C-20}" fill="none" stroke="${d}" stroke-width="1.6" stroke-dasharray="4 4"/>${dots}`;}
+  else if(kind==='threads'){const rows=[C-22,C,C+22];const pat=[[1,0,1,1,0,1,0,0,1,0],[0,1,1,0,1,0,1,1,0,1],[1,1,0,1,0,0,1,0,1,1]];p=rows.map((yy,ri)=>{const hi=yy-8,lo=yy+8,st=40;let s=`M0,${pat[ri][0]?hi:lo} `;let x=0;for(let i=0;i<pat[ri].length;i++){const lvl=pat[ri][i]?hi:lo;s+=`L${x},${lvl} L${x+st},${lvl} `;x+=st;}return `<path d="${s}" fill="none" stroke="${ri===1?m:d}" stroke-width="1.4"/>`;}).join('');}
+  return `<svg viewBox="0 0 ${w} ${H}" preserveAspectRatio="none">${grid}${p}</svg>`;
+}
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function startBeam(card){const svg=card.querySelector('svg');if(!svg)return;const path=svg.querySelector('path');if(!path)return;let len;try{len=path.getTotalLength();}catch(e){return;}if(!len)return;const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('r','3.4');dot.setAttribute('fill','var(--screen-trace)');dot.style.filter='drop-shadow(0 0 5px var(--screen-trace))';svg.appendChild(dot);let pos=0,raf;(function step(){pos=(pos+len/85)%len;const pt=path.getPointAtLength(pos);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);raf=requestAnimationFrame(step);})();card._beam=()=>{cancelAnimationFrame(raf);dot.remove();};}
+const grid=document.getElementById('grid');
+function render(filter){
+  curFilter=filter; grid.innerHTML='';
+  CUR.projects.filter(p=>filter==='all'||p.cat===filter).forEach(p=>{
+    const el=document.createElement('article'); el.className='card reveal in';
+    el.innerHTML=`<div class="thumb">${trace(p.trace)}<span class="tag">${p.tag}</span><span class="uc">${p.uc}</span></div>
+      <div class="body"><h3>${p.title}</h3><p class="sum">${p.sum}</p>
+      <div class="chips">${p.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+      <div class="more"><span class="x">+</span> ${CUR.ui.moreDetails}</div>
+      <div class="detail"><div class="detail-inner"><h4>${CUR.ui.whatIDid}</h4>
+      <ul>${p.details.map(d=>`<li>${d}</li>`).join('')}</ul>
+      <div class="value"><b>${CUR.ui.howUseful}</b>${p.how}</div></div></div></div>`;
+    el.addEventListener('click',e=>{if(e.target.closest('a'))return;el.classList.toggle('open');});
+    if(!reduce){el.addEventListener('mouseenter',()=>{if(!el._beam)startBeam(el);});el.addEventListener('mouseleave',()=>{if(el._beam){el._beam();el._beam=null;}});}
+    grid.appendChild(el);
+  });
+}
+const skillsGrid=document.getElementById('skillsGrid');
+function renderSkills(){
+  skillsGrid.innerHTML='';
+  CUR.skills.forEach(col=>{
+    const c=document.createElement('div'); c.className='skillcol reveal in';
+    c.innerHTML=`<h3><i></i>${col.title}</h3><div class="role">${col.role}</div>`+
+      col.rows.map(r=>`<div class="srow"><div class="top"><span>${r.label}</span><span>${r.level}</span></div><div class="bar"><i data-w="${r.w}"></i></div></div>`).join('');
+    skillsGrid.appendChild(c);
+  });
+  setTimeout(()=>skillsGrid.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%'),60);
+}
+
+/* ---- IDIOMA ---- */
+function applyLang(lang){
+  CURLANG=lang; CUR=I18N[lang];
+  root.lang=(lang==='zh'?'zh-Hans':lang);
+  try{localStorage.setItem('lang',lang);}catch(e){}
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(CUR.ui[k]!=null)el.textContent=CUR.ui[k];});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.getAttribute('data-i18n-html');if(CUR.ui[k]!=null)el.innerHTML=CUR.ui[k];});
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{const k=el.getAttribute('data-i18n-title');if(CUR.ui[k]!=null)el.title=CUR.ui[k];});
+  document.querySelectorAll('#langSw button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  document.querySelectorAll('.wb').forEach(b=>{const k='wave'+b.dataset.wave.charAt(0).toUpperCase()+b.dataset.wave.slice(1);const wl=b.querySelector('.wl');if(CUR.ui[k]&&wl)wl.textContent=CUR.ui[k];});
+  if(typeof updateHold==='function')updateHold();
+  const hint=document.getElementById('scopeHint'); if(hint)hint.textContent=CUR.ui.scopeHint;
+  if(typeof mouseX!=='undefined'&&mouseX==null&&readEl)readEl.textContent=frozen?CUR.ui.scopeHold:CUR.ui.scopeTrig;
+  render(curFilter); renderSkills();
+}
+document.querySelectorAll('#langSw button').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
+
+/* ---- OSCILOSCÓPIO ---- */
+const cv=document.getElementById('scopeCanvas');const ctx=cv.getContext('2d');const readEl=document.getElementById('scopeRead');const ledHold=document.getElementById('ledHold');const tdivEl=document.getElementById('tdiv');
+let t=0,mouseX=null,frozen=false,mode='sine',freqScale=1;
+function size(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+size();window.addEventListener('resize',size);
+function setCursor(e){const r=cv.getBoundingClientRect();mouseX=e.clientX-r.left;}
+cv.addEventListener('pointerdown',setCursor);
+cv.addEventListener('pointermove',setCursor);
+cv.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')mouseX=null;});
+const holdBtn=document.getElementById('holdBtn');
+function updateHold(){if(ledHold)ledHold.classList.toggle('on',frozen);if(holdBtn){holdBtn.classList.toggle('on',frozen);const hg=holdBtn.querySelector('.hg');const wl=holdBtn.querySelector('.wl');if(hg)hg.textContent=frozen?'\u25b6':'\u23f8';if(wl)wl.textContent=frozen?CUR.ui.runBtn:CUR.ui.holdBtn;}}
+if(holdBtn)holdBtn.addEventListener('click',()=>{frozen=!frozen;updateHold();if(reduce)draw();});
+cv.addEventListener('wheel',e=>{e.preventDefault();freqScale=Math.min(3,Math.max(0.5,freqScale*(e.deltaY<0?1.12:0.89)));if(tdivEl)tdivEl.textContent=(5/freqScale).toFixed(1)+' ms/div';if(reduce)draw();},{passive:false});
+document.querySelectorAll('.wb').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.wb').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.wave;if(reduce)draw();}));
+function waveY(x,w,h){const ph=(x/26)*freqScale-t;let y=0;if(mode==='sine'){y=Math.sin(ph)*16+Math.sin(ph*2.7)*5;const bm=Math.sin((x/w)*Math.PI*2+t*0.6);if(bm>0.5)y+=Math.sin(x*1.3+t*9)*16*(bm-0.5)*2;}else if(mode==='square'){y=(Math.sin(ph)>=0?1:-1)*20;}else if(mode==='emg'){const env=Math.pow(Math.max(0,Math.sin((x/w)*Math.PI*3-t*1.2)),2);y=(Math.sin(x*1.9+t*13)+Math.sin(x*1.1+t*8))*17*env+(Math.random()-.5)*3*env;}else if(mode==='step'){const period=240/freqScale;const xx=(((x)-(t*60))%period+period)%period;const k=xx/period;if(k<0.15){y=-20;}else{const tt=(k-0.15)*12;y=20-Math.exp(-tt/2.4)*Math.cos(tt*1.6)*34;}}return h/2-y;}
+function draw(){const w=cv.width/devicePixelRatio,h=cv.height/devicePixelRatio;ctx.clearRect(0,0,w,h);ctx.strokeStyle=GR;ctx.globalAlpha=.7;ctx.lineWidth=1;for(let x=0;x<w;x+=w/10){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=0;y<h;y+=h/4){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}ctx.globalAlpha=1;ctx.beginPath();for(let x=0;x<=w;x++)ctx.lineTo(x,waveY(x,w,h));ctx.strokeStyle=TR;ctx.lineWidth=1.8;ctx.shadowColor=TR;ctx.shadowBlur=7;ctx.stroke();ctx.shadowBlur=0;if(mouseX!=null&&mouseX>=0&&mouseX<=w){const y=waveY(mouseX,w,h);ctx.strokeStyle='rgba(242,169,59,.85)';ctx.setLineDash([4,4]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(mouseX,0);ctx.lineTo(mouseX,h);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#F2A93B';ctx.beginPath();ctx.arc(mouseX,y,3.4,0,7);ctx.fill();const volts=((h/2-y)/(h/2))*2.5;if(readEl)readEl.textContent=(frozen?CUR.ui.holdLbl:CUR.ui.cursorLbl)+' ▸ '+volts.toFixed(2)+' V';}else if(readEl){readEl.textContent=frozen?CUR.ui.scopeHold:CUR.ui.scopeTrig;}if(!frozen)t+=0.05;if(!reduce)requestAnimationFrame(draw);}
+refreshScope();if(reduce){t=2;draw();}else draw();
+
+/* ---- ARRANQUE DE IDIOMA ---- */
+(function(){let s=null;try{s=localStorage.getItem('lang');}catch(e){}let l=s;if(!l){const n=(navigator.language||'pt').toLowerCase();l=n.startsWith('zh')?'zh':n.startsWith('pt')?'pt':n.startsWith('en')?'en':'pt';}applyLang(l);})();
+
+/* ---- REVEAL ---- */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+</script>
+</body>
+</html>
